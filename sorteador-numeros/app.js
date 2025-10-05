@@ -4,14 +4,21 @@ function sortear() {
     let ate = parseInt(document.getElementById("ate").value);
 
     let numerosSortedos = [];
-
-    for (let i = 0; i < quantidade; i++) {
-        let numeroSorteado = numeroAleatorio(de, ate);
-        //verificar se o numero já foi sortedo
-        if (numerosSortedos.includes(numeroSorteado)) {
-            i--;
-        } else {
-            numerosSortedos.push(numeroSorteado);
+    // Verifiva se a quantida de numero a ser soteado é superior ao
+    // intervalo de numeros
+    let intervalo = ate - de;
+    if (quantidade > intervalo ) {
+        alert( 'Campo "Quantidade" deve ser menor ou igual ao intervalo informado no campo "Do número" até o campo "Até o número". Verifique!');
+        reiniciar();
+    }else{
+        for (let i = 0; i < quantidade; i++) {
+            let numeroSorteado = numeroAleatorio(de, ate);
+           //verificar se o numero já foi sortedo
+            if (numerosSortedos.includes(numeroSorteado)) {
+                i--;
+            } else {
+                numerosSortedos.push(numeroSorteado);
+            }
         }
     }
     //ordenar os numeros
