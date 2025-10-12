@@ -85,27 +85,70 @@ function sortear(){
     // Carlos	                Ana	                        Carlos → Ana
     // Joana	                Carlos	                    Joana → Carlos
 
-    // Passo 5 — Garantir que ninguém tire a si mesmo
-    // Pode acontecer de o sorteio sair assim:
-
-    // Ana → Ana
-    // Carlos → Joana
-    // Joana → Carlos
-
-    // Isso não pode acontecer.
-    // Se alguém tirar a si mesmo, precisamos embaralhar novamente até o resultado ser válido.
-
-    // Lógica:
-
-    // Enquanto houver alguém que tirou a si mesmo, sorteie de novo.
-    // Isso é feito com um laço que verifica se há coincidências e refaz o embaralhamento.
-    
+     
     let valido = false;
 
     while(!valido){
         valido = true;
 
         // Passo 3 — Embaralhar a lista de forma aleatória
+        embaralhar(sorteio);
+
+        console.log("tentativa atual:", sorteio);
+
+        // Passo 5 — Garantir que ninguém tire a si mesmo
+        // Pode acontecer de o sorteio sair assim:
+
+        // Ana → Ana
+        // Carlos → Joana
+        // Joana → Carlos
+
+        // Isso não pode acontecer.
+        // Se alguém tirar a si mesmo, precisamos embaralhar novamente até o resultado ser válido.
+
+        // Lógica:
+
+        // Enquanto houver alguém que tirou a si mesmo, sorteie de novo.
+        // Isso é feito com um laço que verifica se há coincidências e refaz o embaralhamento.
+
+        for(let i = 0; i < amigos.length; i++){
+            if(amigos[i] === sorteio[i]){
+                valido = false;
+                break;
+            }
+        }
+    }
+
+    // Passo 6 — Mostrar o resultado
+
+    // Quando o sorteio for válido:
+    // Criamos uma string com todos os pares (por exemplo: "Ana → Joana<br>Carlos → Ana<br>Joana → Carlos").
+    let resultado = '';
+
+    for (let i = 0; i < amigos.length; i++){
+        // usando um for para percorrer todos os índices:
+        resultado += `${amigos[i]} → ${sorteio[i]}<br>`;
+        //dentro do laço, concatenar cada par no texto, com uma quebra de linha <br> para exibir um por linha:
+    }
+    // Colocamos esse texto dentro do elemento HTML com id="lista-sorteio", para exibir na tela.
+    document.getElementById("lista-sorteio").innerHTML = resultado;
+}
+
+function reiniciar(){
+    // Objetivos:
+
+    // Esvaziar o array amigos (limpar a memória).
+    amigos = [];
+    // Apagar os textos que aparecem nas áreas:
+    // “Amigos incluídos” (#lista-amigos);
+    document.getElementById("lista-amigos").textContent = "";
+    // “Sorteio” (#lista-sorteio).
+    document.getElementById("lista-sorteio").innerHTML = "";
+}
+
+
+function embaralhar(array){
+     // Passo 3 — Embaralhar a lista de forma aleatória
         // Precisamos misturar as posições do array sorteio.
         // Existem várias formas de embaralhar:
         // A mais comum é o algoritmo Fisher-Yates, que troca elementos aleatoriamente entre si.
@@ -143,7 +186,7 @@ function sortear(){
         
         console.log("nova tentativa de sorteio...");
 
-        for(let i = sorteio.length - 1; i > 0; i--){
+        for(let i = array.length - 1; i > 0; i--){
             //sorteio.length - 1 é o último índice (pois os arrays começam do zero).
             // i-- significa que estamos indo de trás pra frente.
             // O laço roda enquanto i > 0 (ou seja, até o primeiro elemento).
@@ -153,49 +196,12 @@ function sortear(){
             // Multiplicamos por (i + 1) para cobrir todos os índices até o atual.
             // Math.floor() arredonda para baixo, garantindo que seja um número inteiro.
 
-            let temp = sorteio[i];
-            sorteio[i] = sorteio[j];
-            sorteio[j] = temp;
+            let temp = array[i];
+            array[i] = array[j];
+            array[j] = temp;
             //Explicação:
             // Guardamos sorteio[i] em temp.
             // Atribuímos sorteio[j] em sorteio[i].
             // Depois colocamos o valor original de i em sorteio[j].
         }
-        console.log("tentativa atual:", sorteio);
-
-
-        for(let i = 0; i < amigos.length; i++){
-            if(amigos[i] === sorteio[i]){
-                valido = false;
-                break;
-            }
-        }
-    }
-
-
-    // Passo 6 — Mostrar o resultado
-
-    // Quando o sorteio for válido:
-    // Criamos uma string com todos os pares (por exemplo: "Ana → Joana<br>Carlos → Ana<br>Joana → Carlos").
-    let resultado = '';
-
-    for (let i = 0; i < amigos.length; i++){
-        // usando um for para percorrer todos os índices:
-        resultado += `${amigos[i]} → ${sorteio[i]}<br>`;
-        //dentro do laço, concatenar cada par no texto, com uma quebra de linha <br> para exibir um por linha:
-    }
-    // Colocamos esse texto dentro do elemento HTML com id="lista-sorteio", para exibir na tela.
-    document.getElementById("lista-sorteio").innerHTML = resultado;
-}
-
-function reiniciar(){
-    // Objetivos:
-
-    // Esvaziar o array amigos (limpar a memória).
-    amigos = [];
-    // Apagar os textos que aparecem nas áreas:
-    // “Amigos incluídos” (#lista-amigos);
-    document.getElementById("lista-amigos").textContent = "";
-    // “Sorteio” (#lista-sorteio).
-    document.getElementById("lista-sorteio").innerHTML = "";
 }
